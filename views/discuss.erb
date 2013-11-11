@@ -1,0 +1,57 @@
+<div class="span5 offset3">
+	<form action="/discuss" class="form-actions" method="post">
+	您觉得食堂服务态度如何：
+	<label class="radio">
+	  <input type="radio" name="attitude" id="attitude1" value="1">
+	  很差
+	</label>
+	<label class="radio">
+	  <input type="radio" name="attitude" id="attitude2" value="2">
+	  一般
+	</label>
+	<label class="radio">
+	  <input type="radio" name="attitude" id="attitude3" value="3">
+	  很好
+	</label>
+	您觉得食堂菜品质量如何：
+	<label class="radio">
+	  <input type="radio" name="quality" id="quality1" value="1">
+	  很差
+	</label>
+	<label class="radio">
+	  <input type="radio" name="quality" id="quality2" value="2">
+	  一般
+	</label>
+	<label class="radio">
+	  <input type="radio" name="quality" id="quality3" value="3">
+	  很好
+	</label>
+	您觉得食堂卫生状况如何：
+	<label class="radio">
+	  <input type="radio" name="health" id="health1" value="1">
+	  很差
+	</label>
+	<label class="radio">
+	  <input type="radio" name="health" id="health2" value="2">
+	  一般
+	</label>
+	<label class="radio">
+	  <input type="radio" name="health" id="health3" value="3">
+	  很好
+	</label>
+	您想说的话
+	<textarea name="extra" id="extra" rows="6" style="width: 350px"></textarea>
+	<div class="offset4"><input type="submit" class="btn"/></div>
+	</form>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var attitude = <%=discuss.attitude%>;
+		var quality = <%=discuss.quality%>;
+		var health = <%=discuss.health%>;
+		$("#attitude"+attitude).attr("checked", true);
+		$("#quality"+quality).attr("checked", true);
+		$("#health"+health).attr("checked", true);
+		$("#extra").val("<%=discuss.extra%>");
+	});
+</script>

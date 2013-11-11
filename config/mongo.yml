@@ -1,0 +1,12 @@
+production:
+  sessions:
+    default:
+      hosts:
+        - localhost:27017
+      database: t_order
+development:
+  sessions:
+    default:
+      hosts:
+        - localhost:27017
+      database: t_order

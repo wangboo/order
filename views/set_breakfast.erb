@@ -1,0 +1,59 @@
+<%
+now = Time.now.midnight
+selectDate = if defined? select_date
+	select_date
+else
+	now.tomorrow
+end
+%>
+<div class="span2">
+  <div class="well sidebar-nav">
+    <ul class="nav nav-list" id="list">
+      <li class="nav-header">早餐安排</li>
+      <%7.times do |i|
+      now = now.tomorrow
+      %>
+      <li <%="class='active'" if selectDate==now%>><a href="/set/breakfast?date=<%=now.to_i%>"><%=now.strftime("%y%y-%m-%d")%> <%=case now.wday
+      	when 0
+      	"周末"
+      	when 1
+      	"周一"
+      	when 2
+      	"周二"
+      	when 3
+      	"周三"
+      	when 4
+      	"周四"
+      	when 5
+      	"周五"
+      	when 6
+      	"周六"
+      	end%></a></li>
+      <%end%>
+    </ul>
+  </div><!--/.well -->
+</div><!--/span-->
+<div class="span8">
+<%breakfast = BreakfastSet.where(date: selectDate).first
+if breakfast and not breakfast.arr.empty?
+breakfast.arr.each do |id|
+menu = Menu.find(id)%>
+<div class="span12 well item">
+		<div class="span4">
+			<img style="width: 200px;height: 200px" src="<%=menu.icon%>"/>
+		</div>
+		<div class="span8">
+			<h2><%=menu.name%></h2>
+			<p><%=menu.desc%></p>
+		</div>
+</div>
+<%end
+else%>
+<div class="span12 hero-unit" style="margin-top: 30px">
+	<div class="span4">
+		<img src="/image/what_a_pity.jpg">
+	</div>
+	<div class="span6"><h3>很遗憾，还没有公布该天的早餐!</h3></div>
+</div>
+<%end%>
+</div>

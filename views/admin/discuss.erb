@@ -1,0 +1,79 @@
+<%users = User.where(kind: 0)%>
+<div class="span2">
+  <div class="well sidebar-nav">
+    <ul class="nav nav-list" id="list">
+      <li class="nav-header">--用户--</li>
+      <%users.each do |item|%>
+      <li id="<%=item.id%>"><a href="/admin/discuss?id=<%=item.id%>"><%=item.name%></a></li>
+      <%end%>
+    </ul>
+  </div><!--/.well -->
+</div><!--/span-->
+<div class="span8">
+	<div class="well">
+		<%now = Time.now
+        index = now.year.to_i * 12 + now.month.to_i
+		if discuss = Discuss.where(index: index, userId: user.id).first%>
+		<h2><%=user.name%></h2>
+		您觉得食堂服务态度如何：
+	<label class="radio">
+	  <input type="radio" name="attitude" id="attitude1" value="1" disabled="disabled">
+	  很差
+	</label>
+	<label class="radio">
+	  <input type="radio" name="attitude" id="attitude2" value="2" disabled="disabled">
+	  一般
+	</label>
+	<label class="radio">
+	  <input type="radio" name="attitude" id="attitude3" value="3" disabled="disabled">
+	  很好
+	</label>
+	您觉得食堂菜品质量如何：
+	<label class="radio">
+	  <input type="radio" name="quality" id="quality1" value="1" disabled="disabled">
+	  很差
+	</label>
+	<label class="radio">
+	  <input type="radio" name="quality" id="quality2" value="2" disabled="disabled">
+	  一般
+	</label>
+	<label class="radio">
+	  <input type="radio" name="quality" id="quality3" value="3" disabled="disabled">
+	  很好
+	</label>
+	您觉得食堂卫生状况如何：
+	<label class="radio">
+	  <input type="radio" name="health" id="health1" value="1" disabled="disabled">
+	  很差
+	</label>
+	<label class="radio">
+	  <input type="radio" name="health" id="health2" value="2" disabled="disabled">
+	  一般
+	</label>
+	<label class="radio">
+	  <input type="radio" name="health" id="health3" value="3" disabled="disabled">
+	  很好
+	</label>
+	您想说的话
+	<textarea name="extra" id="extra" rows="6" style="width: 350px" disabled="disabled"></textarea>
+		
+		
+		<%else%>
+		<h4>该用户未参与评论！</h4>
+		<%end%>
+		
+	</div>
+</div>
+<%if discuss%>
+<script type="text/javascript">
+	$(function(){
+		var attitude = <%=discuss.attitude%>;
+		var quality = <%=discuss.quality%>;
+		var health = <%=discuss.health%>;
+		$("#attitude"+attitude).attr("checked", true);
+		$("#quality"+quality).attr("checked", true);
+		$("#health"+health).attr("checked", true);
+		$("#extra").val("<%=discuss.extra%>");
+	});
+</script>
+<%end%>

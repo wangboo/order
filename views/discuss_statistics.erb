@@ -1,0 +1,27 @@
+<%
+now = Time.now
+index = now.year.to_i * 12 + now.month.to_i
+discusses = Discuss.where(index: index)
+user_count = User.where(kind: 0, valid: true).size
+discus_count = discusses.size
+attitude = 0
+quality = 0
+health = 0
+discusses.each do |d|
+	attitude += score d.attitude
+	quality +=  score d.quality
+	health += score d.health
+end
+attitude = 10*attitude / discus_count
+quality = 10*quality / discus_count
+health = 10*health / discus_count
+%>
+<div class="span8 offset2">
+	<div class="hero-unit">
+		<h2>本月参与评价用户<%=discus_count%>/<%=user_count%></h2>
+		<h4>服务态度得分：<%=attitude%></h4>
+		<h4>菜品质量得分：<%=quality%></h4>
+		<h4>卫生情况得分：<%=health%></h4>
+		<h6>打分算法：很差0分，一般60分，很好100分。总和相加除以投票基数。</h6>
+	</div>
+</div>

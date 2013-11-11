@@ -1,0 +1,93 @@
+<%breakfast = Menu.where(kind: 0)
+now = Time.now.midnight
+selectDate = if defined? select_date
+	select_date
+else
+	now.tomorrow
+end
+%>
+<div class="span2">
+  <div class="well sidebar-nav">
+    <ul class="nav nav-list" id="list">
+      <li class="nav-header">早餐安排</li>
+      <%7.times do |i|
+      now = now.tomorrow
+      %>
+      <li <%="class='active'" if selectDate==now%>><a href="/admin/breakfast/publish?date=<%=now.to_i%>"><%=now.strftime("%y%y-%m-%d")%> <%=case now.wday
+      	when 0
+      	"周末"
+      	when 1
+      	"周一"
+      	when 2
+      	"周二"
+      	when 3
+      	"周三"
+      	when 4
+      	"周四"
+      	when 5
+      	"周五"
+      	when 6
+      	"周六"
+      	end%></a></li>
+      <%end%>
+    </ul>
+  </div><!--/.well -->
+</div><!--/span-->
+<div id="left" class="span3">
+<%
+right = BreakfastSet.where(date: selectDate).first
+left = []
+#如果发布过
+if right
+  breakfast.each do |b|
+    left << b
+    right.arr.each{|id|left.pop if id.to_s == b.id.to_s}
+  end
+else
+  left = breakfast
+end
+left.each do |item|%>
+<div class="well span12" id="<%=item.id%>">
+	<div class="span9">
+		<h5><%=item.name%></h5>
+		<img src="<%=item.icon%>" style="width: 150px;height: 150px"/>
+	</div>
+	<div class="span3"><button class="btn btn-info" onclick="add('<%=item.id%>')" style="margin-top: 100px">添加</button></div>
+</div>
+<%end%>
+</div>
+<div id="right" class="span3 offset2">
+<%if right
+right.arr.each do |id|
+item = Menu.find(id)%>
+<div class="well span12" id="<%=item.id%>">
+	<div class="span3"><button class="btn btn-info" onclick="remove_node('<%=item.id%>')" style="margin-top: 100px">去除</button></div>
+	<div class="span9">
+		<h5><%=item.name%></h5>
+		<img src="<%=item.icon%>" style="width: 150px;height: 150px"/>
+	</div>
+</div>
+<%end
+end%>
+</div>
+</div>
+<script type="text/javascript">
+	function add(id) {
+		$.post("/admin/breakfast/publish/add", {"date": <%=selectDate.to_i%>, "id": id});
+		var div = $("#"+id);
+		var name = div.find("h5").text();
+		var icon = div.find("img")[0].src;
+		div.remove();
+		var node = $('<div class="well span12" id="'+id+'"><div class="span3"><button class="btn btn-info" onclick="remove_node(\''+id+'\')" style="margin-top: 100px">去除</button></div><div class="span9"><h5>'+name+'</h5><img src="'+icon+'" style="width: 150px;height: 150px"/></div></div>');
+		$("#right").append(node);
+	}
+	function remove_node(id) {
+		$.post("/admin/breakfast/publish/remove", {"date": <%=selectDate.to_i%>, "id": id});
+		var div = $("#"+id);
+		var name = div.find("h5").text();
+		var icon = div.find("img")[0].src;
+		div.remove();
+		var node = $('<div class="well span12" id="'+id+'"><div class="span9"><h5>'+name+'</h5><img src="'+icon+'" style="width: 150px;height: 150px"/></div><div class="span3"><button class="btn btn-info" onclick="add(\''+id+'\')" style="margin-top: 100px">添加</button></div></div>');
+		$("#left").append(node);
+	}
+</script>

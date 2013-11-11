@@ -1,0 +1,167 @@
+<%
+now = Time.now.midnight
+selectDate = if defined? select_date
+	select_date
+else
+	now.tomorrow
+end
+%>
+<div id="nav" class="span2">
+  <div class="well sidebar-nav">
+    <ul class="nav nav-list" id="list">
+      <li class="nav-header">早餐统计</li>
+      <%7.times do |i|
+      now = now.tomorrow
+      %>
+      <li <%="class='active'" if selectDate==now%>><a href="/admin/breakfast/count?date=<%=now.to_i%>"><%=now.strftime("%y%y-%m-%d")%> <%=case now.wday
+      	when 0
+      	"周末"
+      	when 1
+      	"周一"
+      	when 2
+      	"周二"
+      	when 3
+      	"周三"
+      	when 4
+      	"周四"
+      	when 5
+      	"周五"
+      	when 6
+      	"周六"
+      	end%></a></li>
+      <%end%>
+    </ul>
+  </div><!--/.well -->
+</div><!--/span-->
+<div id="content" class="span7">
+<%set = BreakfastSet.where(date: selectDate).first
+#该天发布过早餐
+if set and not set.arr.empty?
+	#所有订餐单
+	meals = Meal.where(date: selectDate, kind: 0)
+	#所有有效的用户
+	users = User.where(valid: true, kind: 0)
+	unorderUsers = []
+	mealMap = {}
+	unorderUsers = users.collect{|u|u}
+	orderUsers = []
+	meals.each do |m|
+	  m.order.each do |a|
+	    if mealMap.include? a["id"]
+	    	mealMap[a["id"]] = mealMap[a["id"]] + a["count"].to_i
+	    else
+	    	mealMap[a["id"]] = a["count"].to_i
+	    end
+	  end
+	end%>
+	<div class="alert alert-info" id="alert_info">
+  按P键进入打印模式，再次按P键退回
+</div>
+<h2 id="print_info" style="display: none"><%=select_date.strftime("%y%y-%m-%d")%>早餐报表</h2>
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+	    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+	      点餐统计
+	    </a>
+	  </div>
+	  <div id="collapseOne" class="accordion-body collapse in">
+	    <div class="accordion-inner">
+	      <table class="table table-bordered">
+	      	<tr><td>菜名</td><td>数量</td></tr>
+	      	<%mealMap.each do |id, count|
+	      	menu = Menu.find(id)%>
+	      	<tr>
+	      		<td><%=menu.name%></td>
+	      		<td><%=count%><%=menu.unit%></td>
+	      	</tr>
+	      	<%end%>
+	      </table>
+	    </div>
+	  </div>
+	</div>
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+	    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+	      点餐明细
+	    </a>
+	  </div>
+	  <div id="collapseTwo" class="accordion-body collapse">
+	    <div class="accordion-inner">
+	      <table class="table table-bordered">
+	      	<td>工号</td><td>姓名</td><td>菜名</td><td>数量</td>
+	      	<%meals.each do |meal|
+	      	user = User.find(meal.userId)
+	      	meal.order.each do |order|
+	      		if order["count"].to_i != 0
+	      		  orderUsers << user unless orderUsers.include? user
+	      		  menu = Menu.find(order["id"])%>
+		      	  <tr>
+		      		<td><%=user.cardId%></td>
+		      		<td><%=user.name%></td>
+		      		<td><%=order["name"]%></td>
+		      		<td><%=order["count"]%><%=menu.unit%></td>
+		      	  </tr>
+		      	<%end
+		      	end
+	      	end%>
+	      </table>
+	    </div>
+	  </div>
+	</div>
+	<div class="accordion-group">
+	  <div class="accordion-heading">
+	    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+	      未点餐明细
+	    </a>
+	  </div>
+	  <%unorderUsers = unorderUsers - orderUsers%>
+	  <div id="collapseThree" class="accordion-body collapse">
+	    <div class="accordion-inner">
+	      <table class="table table-bordered">
+	      	<tr><td>工号</td><td>姓名</td></tr>
+	      	<%unorderUsers.each do |u|%>
+	     	 <tr><td><%=u.cardId%></td><td><%=u.name%></td></tr>
+	        <%end%>
+	      </table>
+	    </div>
+	  </div>
+	</div>
+<%  #该天没有发布早餐
+else%>
+<div class="span12 hero-unit" style="margin-top: 30px">
+	<div class="span4">
+		<img src="/image/what_a_pity.jpg">
+	</div>
+	<div class="span6"><h3>您没有公布该天的早餐!</h3></div>
+</div>
+<%end%>
+</div>
+<script type="text/javascript">
+	var printMode = false;
+	$(function(){
+		$("body").keydown(function(event){
+			var keycode = event.which; 
+			if(keycode==80 || keycode == 112){ 
+				if(printMode) {
+					//退出打印模式
+					$("#nav").css("display", "block");
+					$("#alert_info").show();
+					$("#header").show();
+					$("#footer").show();
+					$("#print_info").hide();
+					$("#content").removeClass().addClass("span7");
+					printMode = false;
+				}else {
+					//进入打印模式
+					$("#nav").css("display", "none");
+					$("#alert_info").hide();
+					$("#header").hide();
+					$("#footer").hide();
+					$("#print_info").show();
+					$("#content").removeClass().addClass("span8").addClass("offset2");
+					printMode = true;
+				}
+			}
+		});
+	});
+</script>

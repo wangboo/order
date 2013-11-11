@@ -1,0 +1,85 @@
+<div class="span2">
+  <div class="well sidebar-nav">
+    <ul class="nav nav-list" id="list">
+      <li class="nav-header">早餐</li>
+      <%breakfast.each do |item|%>
+      <li id="<%=item.id%>"><a href="/admin/menu/modify?select=<%=item.id%>"><%=item.name%></a></li>
+      <%end%>
+      <li class="nav-header">午餐</li>
+     <%lunch.each do |item|%>
+      <li id="<%=item.id%>"><a href="/admin/menu/modify?select=<%=item.id%>"><%=item.name%></a></li>
+      <%end%>
+      <li class="nav-header">晚餐</li>
+      <!-- <%breakfast.each do |item|%>
+      <li><a href="/admin/menu/modify?select=<%=item.id%>"><%=item.name%></a></li>
+      <%end%> -->
+    </ul>
+  </div><!--/.well -->
+</div><!--/span-->
+<div class="span8">
+<%if defined?(s)%>
+<div class="alert alert-success">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  菜单"<%=select.name%>"修改成功!
+</div>
+<%end%>
+<form class="form-actions form-horizontal" method="post" action="/admin/menu/modify" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="<%=select.id%>"/>
+<div class="span8">
+	<div class="control-group">
+	    <label class="control-label" for="inputName">菜名</label>
+	    <div class="controls">
+	      <input type="text" id="inputName" placeholder="请输入菜名" name="name" value="<%=select.name%>">
+	    </div>
+   </div>
+   <div class="control-group">
+	    <label class="control-label" for="inputUnit">单位</label>
+	    <div class="controls">
+	      <input type="text" id="inputUnit" placeholder="如：盘，个，两" name="unit" value="<%=select.unit%>">
+	    </div>
+   </div>
+   <div class="control-group">
+    <label class="control-label" for="inputKind">属于那一餐</label>
+    <div class="controls">
+      	<select id="inputKind" name="kind">
+      		<option id="opt_0" value="0">早餐</option>
+      		<option id="opt_1" value="1">午餐</option>
+      		<option id="opt_2" value="2">晚餐</option>
+      		<option id="opt_0_1" value="3">早餐&午餐</option>
+      		<option id="opt_0_2" value="4">早餐&晚餐</option>
+      		<option id="opt_1_2" value="5">午餐&晚餐</option>
+      		<option id="opt_1_2_3" value="6">早餐&午餐&晚餐</option>
+      	</select>
+    </div>
+  </div>
+  <div class="control-group">
+	    <label class="control-label" for="inputFile">展示图片</label>
+	    <div class="controls">
+	      <input type="file" id="inputFile" placeholder="图片" name="file">
+	    </div>
+   </div>
+   <div class="control-group">
+	    <label class="control-label" for="inputDesc">描述</label>
+	    <div class="controls">
+	      <textarea class="input" id="inputDesc" style="height: 250px" name="desc"><%=select.desc%></textarea>
+	    </div>
+   </div>
+   <div class="span6 offset4">
+	   <input class="btn btn-primary" type="submit" value="提交"/>
+	   <a class="offset2 btn btn-danger" href="/admin/menu/delete?id=<%=select.id%>">删除</a>
+   	</div>
+</div>
+<div>
+	<img src="<%=select.icon%>" style="width: 200px;height: 200px;"/>
+</div>
+</form>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var select = "#<%=select.id%>";
+		$(select).addClass("active");
+		$("#opt_<%=select.kind.join("_")%>").attr("selected", true);
+		
+	});
+</script>

@@ -1,0 +1,48 @@
+<style type="text/css">
+
+</style>
+<div class="span8 offset2">
+<form class="form-actions form-horizontal" method="post" action="/admin/menu/add" enctype="multipart/form-data">
+	<div class="control-group">
+	    <label class="control-label" for="inputName">菜名</label>
+	    <div class="controls">
+	      <input type="text" id="inputName" placeholder="请输入菜名" name="name">
+	    </div>
+   </div>
+   <div class="control-group">
+	    <label class="control-label" for="inputUnit">单位</label>
+	    <div class="controls">
+	      <input type="text" id="inputUnit" placeholder="如：盘，个，两" name="unit">
+	    </div>
+   </div>
+   <div class="control-group">
+    <label class="control-label" for="inputKind">属于那一餐</label>
+    <div class="controls">
+      	<select id="inputKind" name="kind">
+      		<option selected value="0">早餐</option>
+      		<option value="1">午餐</option>
+      		<option  value="2">晚餐</option>
+      		<option value="3">早餐&午餐</option>
+      		<option value="4">早餐&晚餐</option>
+      		<option value="5">午餐&晚餐</option>
+      		<option value="6">早餐&午餐&晚餐</option>
+      	</select>
+    </div>
+  </div>
+  <div class="control-group">
+	    <label class="control-label" for="inputFile">展示图片</label>
+	    <div class="controls">
+	      <input type="file" id="inputFile" placeholder="图片" name="file">
+	    </div>
+   </div>
+   <div class="control-group">
+	    <label class="control-label" for="inputDesc">描述</label>
+	    <div class="controls">
+	      <textarea class="input input-xlarge" id="inputDesc" style="height: 250px" name="desc"></textarea>
+	    </div>
+   </div>
+   <div class="span6 offset4">
+   <input class="btn btn-primary" type="submit" value="提交"/>
+   	</div>
+</form>
+</div>

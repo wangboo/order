@@ -1,0 +1,81 @@
+<style type="text/css">
+.item {
+	margin-top: 8px;
+	padding: 5px 5px 5px 2px;
+}
+</style>
+
+<div class="span7 offset2">
+<%if menus and not menus.arr.empty?%>
+<!-- 有点餐-->
+<%if flag == 10%>
+<div class="span12 alert alert-danger"><strong>现在已经下班不能点餐了!</strong></div>
+<%elsif flag == 11%>
+<div class="span12 alert alert-danger"><strong>请8点之后再点餐！</strong></div>
+<%end%>
+<%date = Time.now%>
+
+<%if meal
+count = meal.eat%>
+<div class="span12 alert alert-info"><h3>
+	今天是<%=date.year%>年<%=date.month%>月<%=date.day%>  星期<%=date.wday==0?"天":date.wday%><br/>
+	您今天已经点过<%=next_work_day_name%>的午餐了。</h3>
+	</div>
+<%else
+count = 0%>
+<div class="span12 alert alert-error"><h3>
+	今天是<%=date.year%>年<%=date.month%>月<%=date.day%>  星期<%=date.wday==0?"天":date.wday%><br/>
+	您今天还未点<%=next_work_day_name%>的午餐！</h3></div>
+<%end%>
+
+我要吃&nbsp;&nbsp;&nbsp;<input id="eat" type="text" class="input input-small" value="<%=count%>"/>&nbsp;份&nbsp;&nbsp;&nbsp;
+<button id="eat_btn" class="btn btn-info" onclick="eat()">确定</button>
+<%menus.arr.each do |i|
+menu = Menu.find(i)%>
+<div class="span12 well item">
+		<div class="span4">
+			<img style="width: 200px;height: 200px" src="<%=menu.icon%>"/>
+		</div>
+		<div class="span8">
+			<h2><%=menu.name%></h2>
+			<p><%=menu.desc%></p>
+		</div>
+</div>
+<%end%>
+<script type="text/javascript">
+	function eat() {
+		var value = $("#eat").val();
+		try{
+			var intValue = parseInt(value);
+			if(intValue < 0) {
+				alert("请输入有效的正数");
+				return;
+			}
+			$.post("/index/order/lunch", {"eat": value, "date": "<%=select_date.to_i%>"}, function(data, code){
+			if(data == "s") {
+				alert("修改成功");
+				$("#warning").alert('close');
+			}else {
+				alert(data);
+			}
+		});
+		}catch(e) {
+			alert("请输入有效的正数");
+		}
+	}
+<%if flag == 10 or flag == 11%>
+$(function() {
+	$("#eat").attr("disabled", "disabled");
+	$("#eat_btn").attr("disabled", true);
+});
+<%end%>
+</script>
+<%else%>
+<div class="span10 hero-unit" style="margin-top: 30px">
+	<div class="span4">
+		<img src="/image/what_a_pity.jpg">
+	</div>
+	<div class="span6"><h3>很遗憾，还没有公布该天的午餐!</h3></div>
+</div>
+<%end%>
+</div>

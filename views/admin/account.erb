@@ -1,0 +1,65 @@
+<%users = User.where(kind: 0)
+%>
+<div class="span2">
+  <div class="well sidebar-nav">
+    <ul class="nav nav-list" id="list">
+      <li class="nav-header">普通用户</li>
+      <%users.each do |item|%>
+      <li id="<%=item.id%>"><a href="/admin/account?select=<%=item.id%>"><%=item.name%></a></li>
+      <%end%>
+      <li id="menuAdd"><a href="/admin/account/add">--添加--</a></li>
+    </ul>
+  </div><!--/.well -->
+</div><!--/span-->
+<div class="span8">
+	<%if defined?(s)%>
+	<div class="alert alert-success">
+	  <button type="button" class="close" data-dismiss="alert">&times;</button>
+	  用户"<%=select.name%>"修改成功!
+	</div>
+	<%end%>
+	<%if defined?(c)%>
+	<div class="alert alert-success">
+	  <button type="button" class="close" data-dismiss="alert">&times;</button>
+	  用户"<%=select.name%>"增加成功!
+	</div>
+	<%end%>
+<form class="form-actions form-horizontal" method="post" action="<%=
+if defined?(create)
+  "/admin/account/add"
+else
+  "/admin/account/modify"
+end%>">
+<input type="hidden" name="id" value="<%=select.id%>"/>
+<div class="span8">
+	<div class="control-group">
+	    <label class="control-label" for="inputName">姓名</label>
+	    <div class="controls">
+	      <input type="text" id="inputName" placeholder="用户姓名" name="name" value="<%=select.name%>">
+	    </div>
+   </div>
+   <div class="control-group">
+	    <label class="control-label" for="inputUnit">卡号</label>
+	    <div class="controls">
+	      <input type="text" id="inputUnit" placeholder="单位卡号" name="cardId" value="<%=select.cardId%>">
+	    </div>
+   </div>
+   <div class="control-group">
+	    <label class="control-label" for="inputUnit">密码</label>
+	    <div class="controls">
+	      <input type="text" id="inputUnit" placeholder="用户密码" name="pwd" value="<%=select.pwd%>">
+	    </div>
+   </div>
+   <div class="span6 offset4">
+   <input class="btn btn-primary" type="submit" value="提交"/>
+   <a class="btn btn-danger offset2" href="/admin/account/delete?id=<%=select.id%>">删除</a>
+   	</div>
+</div>
+</form>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var selectId = "<%=select.id%>";
+		$("#"+selectId).addClass("active");
+	});
+</script>

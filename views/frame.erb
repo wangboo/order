@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>食堂点餐系统</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<script src="/js/jquery-1.8.3.js"></script>
+		<script src="/js/bootstrap.js"></script>
+		<script type="text/javascript"></script>
+		<!-- Le styles -->
+		<link href="/css/bootstrap.css" rel="stylesheet">
+		<link href="/css/bootstrap-responsive.css" rel="stylesheet">
+		<style type="text/css">
+* {
+    margin: 0;
+}
+html, body {
+    height: 91%;
+}
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -50px;
+}
+.footer, .push {
+    height: 50px;
+}
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+.sidebar-nav {
+	padding: 9px 0;
+}
+</style>
+
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+		<script src="../assets/js/html5shiv.js"></script>
+		<![endif]-->
+
+		<body>
+			<div class="navbar navbar-inverse navbar-fixed-top" id="header">
+				<div class="navbar-inner">
+					<div class="container-fluid">
+						<div class="navbar-inner">
+							<div class="container" style="width: auto;">
+								<a class="brand" href="#">食堂点餐系统</a>
+								<ul class="nav" role="navigation">
+									<li class="dropdown">
+										<a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">点餐 <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/index">早餐</a>
+											</li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/lunch">午餐</a>
+											</li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/dinner">晚餐</a>
+											</li>
+										</ul>
+									</li>
+									<li class="dropdown">
+										<a href="#" id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">查询 <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/set/breakfast">早饭安排</a>
+											</li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/set/lunch">午饭安排</a>
+											</li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="#">晚饭</a>
+											</li>
+											<li role="presentation" class="divider"></li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="#">Separated link</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<ul class="nav pull-right">
+									<li id="fat-menu" class="dropdown">
+										<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown"><%=session[:user].name%> <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/account">资料</a>
+											</li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="#">Another action</a>
+											</li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="#">Something else here</a>
+											</li>
+											<li role="presentation" class="divider"></li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/logout">退出</a>
+											</li>
+										</ul>
+									</li>
+									<li id="fat-menu" class="dropdown">
+										<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">评价 <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/discuss">我要评价</a>
+											</li>
+											<li role="presentation">
+												<a role="menuitem" tabindex="-1" href="/discuss_statistics">查看评价</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="container-fluid">
+				<div class="row-fluid">
+					<%=erb innerView, locals: inner%>
+				</div><!--/row-->
+
+				<div id="footer">
+		      	<hr>
+		      <div class="container">
+		        <p class="muted credit">powered by 岑雨行 2013</p>
+		      </div>
+			</div>
+
+			</div><!--/.fluid-container-->
+
+			<!-- Le javascript
+			================================================== -->
+			<!-- Placed at the end of the document so the pages load faster -->
+		</body>
+</html>

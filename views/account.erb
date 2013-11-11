@@ -1,0 +1,31 @@
+<div class="span8 offset2">
+<%if defined?(s)%>
+	<div class="alert alert-success">
+	  <button type="button" class="close" data-dismiss="alert">&times;</button>
+	  资料修改成功!
+	</div>
+<%end%>
+<form class="form-actions form-horizontal" method="post" action="/account">
+	<div class="control-group">
+	    <label class="control-label" for="inputName">姓名</label>
+	    <div class="controls">
+	      <input type="text" id="inputName" disabled="true" placeholder="用户姓名" name="name" value="<%=user.name%>">
+	    </div>
+   </div>
+   <div class="control-group">
+	    <label class="control-label" for="inputUnit">卡号</label>
+	    <div class="controls">
+	      <input type="text" id="inputUnit" disabled="true"  placeholder="单位卡号" name="cardId" value="<%=user.cardId%>">
+	    </div>
+   </div>
+   <div class="control-group">
+	    <label class="control-label" for="inputPwd">密码</label>
+	    <div class="controls">
+	      <input type="text" id="inputPwd" placeholder="用户密码" name="pwd" value="<%=user.pwd%>">
+	    </div>
+   </div>
+   <div class="span6 offset4">
+   <input class="btn btn-primary" type="submit" value="提交"/>
+   	</div>
+</div>
+</form>
